@@ -2,3 +2,11 @@
     width: 80%;
     border: 1px solid black;
 }
+
+.btn {
+    margin: 1rem !important;
+}
+
+.td-btn {
+    padding: 0 !important;
+}

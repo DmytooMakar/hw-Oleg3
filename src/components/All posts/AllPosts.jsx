@@ -10,9 +10,7 @@ export default function AllPosts() {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
-        axios.get('http://localhost:3001/posts', {
-            responseType: 'json'
-        })
+        axios.get('http://localhost:3001/posts')
         .then(data => setPosts(data.data))
     }, [])
     
@@ -25,6 +23,7 @@ export default function AllPosts() {
                     <th>Id</th>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Edit & Delete</th>
                 </tr>
             </thead>
             {posts.map(post => <Post post={post} key={post.id}/>)}

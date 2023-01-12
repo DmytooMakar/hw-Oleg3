@@ -6,15 +6,10 @@ import Forms from './components/Form/Form';
 
 function App() {
   return (
-    <>
       <div className='container'>
         <AllPosts />
         <Forms />
       </div>
-      
-      
-    </>
-    
   );
 }
 
