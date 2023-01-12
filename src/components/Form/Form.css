@@ -1,0 +1,14 @@
+.form-container {
+    width: 20%;
+    border: 1px solid black;
+    background-color: aquamarine;
+}
+
+.form {
+    margin-top: .3rem;
+}
+
+
+.btn {
+    margin-left: 5rem;
+}
