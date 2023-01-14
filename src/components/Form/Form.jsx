@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { 
     Col, 
     Form,
@@ -9,26 +9,38 @@ import axios from "axios"
 
 import "./Form.css"
 
-function Forms() {
+function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
 
+    const [error, setError] = useState(false)
     const nameRef = useRef(null);
     const descriptionRef = useRef(null);
 
-
-    function submitTodo(){
-        
-        axios.post('http://localhost:3001/posts', {
+    function patchBtn(){
+        axios.put(`http://localhost:3001/posts/${selectedPost.id}`, {
             name: nameRef.current.value,
             description: descriptionRef.current.value
         })
-        .then(res => console.log(res))
-
+        .then(res => {reload() 
+        setSelectedPost(null)
+        })
     }
 
-    
+
+    function submitTodo(){
+
+        if(nameRef.current.value === '' || nameRef.current.value.length > 20){     
+            return (setError(true), alert('enter a valid value no more than 20 characters'))
+        } 
+        axios.post('http://localhost:3001/posts', {
+                name: nameRef.current.value,
+                description: descriptionRef.current.value})
+            .then(res => {setPosts((prev) => [...prev, res.data])
+            setError(false)
+            })
+    }
 
 
-    return (<div className="form-container">
+    return (<div id="form-container" className="form-container">
         <Form className="form">
             <Form.Group>
                 <Row>
@@ -36,7 +48,7 @@ function Forms() {
                     Name:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control ref={nameRef} size="sm" type="text" placeholder="Enter name" />
+                        <Form.Control className={error?'warning':''} id="name" ref={nameRef} key={selectedPost?.id + 'a'} defaultValue={selectedPost?selectedPost.name:''} size="sm" type="text" placeholder="Enter name" />
                     </Col>
                 </Row>
             </Form.Group>
@@ -46,12 +58,12 @@ function Forms() {
                     Description:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control ref={descriptionRef} size="sm" type="text" placeholder="Enter description" />
+                        <Form.Control id="description" ref={descriptionRef} key={selectedPost?.id + 'b'} defaultValue={selectedPost?selectedPost.description:''} size="sm" type="text" placeholder="Enter description" />
                     </Col>
                 </Row>
             </Form.Group>
         </Form>
-        <Button variant="primary" onClick={submitTodo}>Submit</Button>
+        <Button variant="primary" onClick={selectedPost?patchBtn:submitTodo}>Submit</Button>
         
     </div>
     )

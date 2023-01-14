@@ -4,6 +4,11 @@
     background-color: aquamarine;
 }
 
+.warning {
+    border: 1px solid red;
+    background-color: rgb(182, 113, 126);
+}
+
 .form {
     margin-top: .3rem;
 }

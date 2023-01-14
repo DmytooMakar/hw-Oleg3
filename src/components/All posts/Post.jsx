@@ -1,25 +1,24 @@
-import { useRef } from "react";
+import { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { BsFillPencilFill } from "react-icons/bs";
 import { AiTwotoneDelete } from "react-icons/ai";
 import axios from "axios";
 
-export default function Post({post}){
+import { Context } from "../../Context";
 
-    
+export default function Post({ post }){
+
+    const { setSelectedPost, reload } = useContext(Context)
 
     function updateBtn(){
-        let update = axios.patch('http://localhost:3001/posts', {
-            name : '',
-            description: ''
-        })
-        console.log(update)
-    }
-
-    
+        setSelectedPost({name: post.name,
+            description: post.description,
+            id: post.id 
+    })}
 
     function deleteBtn(){
-        
+        axios.delete(`http://localhost:3001/posts/${post.id}`)
+        .then(res => reload())
     }
 
     return (<>
