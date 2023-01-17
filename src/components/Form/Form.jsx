@@ -12,8 +12,8 @@ import "./Form.css"
 function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
 
     const [error, setError] = useState(false);
-    const [valueName, setValueName] = useState('');
-    const [valueDescription, setValueDescription ] = useState(null);
+    const [valueName, setValueName] = useState(''); 
+    const [valueDescription, setValueDescription ] = useState('');
 
     function patchBtn(){
         axios.put(`http://localhost:3001/posts/${selectedPost.id}`, {
@@ -21,24 +21,24 @@ function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
             description: valueDescription
         })
         .then(res => {reload()
-        setSelectedPost(null)
+        setSelectedPost('')
         })
     }
 
     function submitTodo(){
-        if(valueName.trim() === '' || valueName.length > 20){     
-            return (setError(true), alert('enter a valid value no more than 20 characters'))
+        if(valueName.trim() === '' || valueName.length > 20){
+                 alert('enter a valid value no more than 20 characters')
+            return setError(true) 
         }
         axios.post('http://localhost:3001/posts', {
-                name: valueName,
-                description: valueDescription})
-            .then(res => { setError(false)
-                setPosts((prev) => [...prev, res.data])})
-            
+            name: valueName,
+            description: valueDescription})
+        .then(res => { setError(false)
+        setPosts((prev) => [...prev, res.data])})   
     }
 
 
-    return (<div id="form-container" className="form-container">
+    return (<div className="form-container">
         <Form className="form">
             <Form.Group>
                 <Row>
@@ -46,7 +46,7 @@ function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
                     Name:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control defaultValue={selectedPost?selectedPost.name:undefined} onChange={e => setValueName(e.currentTarget.value)} className={error?'warning':''} size="sm" type="text" placeholder="Enter name" />
+                        <Form.Control value={selectedPost?selectedPost.name:valueName} onChange={e => setValueName(e.target.value)} className={error?'warning':''} size="sm" type="text" placeholder="Enter name" />
                     </Col>
                 </Row>
             </Form.Group>
@@ -56,13 +56,12 @@ function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
                     Description:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control defaultValue={selectedPost?selectedPost.description:undefined} onChange={e => setValueDescription(e.currentTarget.value)} size="sm" type="text" placeholder="Enter description" />
+                        <Form.Control value={selectedPost?selectedPost.description:valueDescription} onChange={e => setValueDescription(e.target.value)} size="sm" type="text" placeholder="Enter description" />
                     </Col>
                 </Row>
             </Form.Group>
         </Form>
         <Button variant="primary" onClick={selectedPost?patchBtn:submitTodo}>Submit</Button>
-        
     </div>
     )
 }
