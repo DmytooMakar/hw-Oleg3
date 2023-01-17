@@ -9,14 +9,12 @@ import axios from "axios"
 
 import "./Form.css"
 
-function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
+function Forms({ setPosts, selectedPost, reload, setSelectedPost, setValueDescription, setValueName, valueName, valueDescription }) {
 
     const [error, setError] = useState(false);
-    const [valueName, setValueName] = useState(''); 
-    const [valueDescription, setValueDescription ] = useState('');
 
     function patchBtn(){
-        axios.put(`http://localhost:3001/posts/${selectedPost.id}`, {
+        axios.put(`http://localhost:3001/posts/${selectedPost}`, {
             name: valueName,
             description: valueDescription
         })
@@ -46,7 +44,9 @@ function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
                     Name:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control value={selectedPost?selectedPost.name:valueName} onChange={e => setValueName(e.target.value)} className={error?'warning':''} size="sm" type="text" placeholder="Enter name" />
+                        <Form.Control value={valueName} 
+                        onChange={e => setValueName(e.target.value)} className={error?'warning':''} 
+                        size="sm" type="text" placeholder="Enter name" />
                     </Col>
                 </Row>
             </Form.Group>
@@ -56,7 +56,9 @@ function Forms({ setPosts, selectedPost, reload, setSelectedPost }) {
                     Description:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control value={selectedPost?selectedPost.description:valueDescription} onChange={e => setValueDescription(e.target.value)} size="sm" type="text" placeholder="Enter description" />
+                        <Form.Control value={valueDescription} 
+                        onChange={e => setValueDescription(e.target.value)} 
+                        size="sm" type="text" placeholder="Enter description" />
                     </Col>
                 </Row>
             </Form.Group>

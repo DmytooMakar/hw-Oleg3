@@ -8,13 +8,13 @@ import { Context } from "../../Context";
 
 export default function Post({ post }){
 
-    const { setSelectedPost, reload } = useContext(Context)
+    const { setSelectedPost, reload, setValueDescription, setValueName } = useContext(Context)
 
     function updateBtn(){
-        setSelectedPost({name: post.name,
-            description: post.description,
-            id: post.id 
-    })}
+        setValueName(post.name)    
+        setValueDescription(post.description)
+        setSelectedPost(post.id)      
+    }
 
     function deleteBtn(){
         axios.delete(`http://localhost:3001/posts/${post.id}`)

@@ -10,7 +10,9 @@ import { Context } from './Context';
 
 function App() {
   const [posts, setPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState(null)
+  const [selectedPost, setSelectedPost] = useState('');
+  const [valueName, setValueName] = useState(''); 
+    const [valueDescription, setValueDescription ] = useState('');
   
   function reload(){
     axios.get('http://localhost:3001/posts')
@@ -25,7 +27,7 @@ function App() {
 
   return (
     <div className='container'>
-      <Context.Provider value={{ setSelectedPost, reload }}>
+      <Context.Provider value={{ setSelectedPost, reload, setValueName, setValueDescription }}>
         <AllPosts posts={posts}/>
       </Context.Provider>
         
@@ -34,6 +36,10 @@ function App() {
       selectedPost={selectedPost}
       setPosts={setPosts}
       setSelectedPost={setSelectedPost}
+      valueName={valueName}
+      valueDescription={valueDescription}
+      setValueName={setValueName}
+      setValueDescription={setValueDescription}
       />
     </div>
   );
