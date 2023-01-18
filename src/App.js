@@ -8,11 +8,13 @@ import AllPosts from './components/All posts/AllPosts';
 import Forms from './components/Form/Form';
 import { Context } from './Context';
 
-function App() {
+function App(){
   const [posts, setPosts] = useState([]);
-  const [selectedPost, setSelectedPost] = useState('');
-  const [valueName, setValueName] = useState(''); 
-    const [valueDescription, setValueDescription ] = useState('');
+  const [value, setValue] = useState({
+    id: '',
+    name: '',
+    description: ''
+  }); 
   
   function reload(){
     axios.get('http://localhost:3001/posts')
@@ -23,24 +25,14 @@ function App() {
     reload()
   }, [])
 
-  console.log(posts)
-
   return (
     <div className='container'>
-      <Context.Provider value={{ setSelectedPost, reload, setValueName, setValueDescription }}>
-        <AllPosts posts={posts}/>
+      <Context.Provider value={{ reload, setValue, posts }}>
+        <AllPosts />
       </Context.Provider>
-        
-      <Forms posts={posts}
-      reload={reload}
-      selectedPost={selectedPost}
-      setPosts={setPosts}
-      setSelectedPost={setSelectedPost}
-      valueName={valueName}
-      valueDescription={valueDescription}
-      setValueName={setValueName}
-      setValueDescription={setValueDescription}
-      />
+      <Context.Provider value={{ reload, setPosts, value, setValue }}>
+        <Forms />
+      </Context.Provider>
     </div>
   );
 }

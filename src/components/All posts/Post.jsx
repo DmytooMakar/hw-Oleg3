@@ -7,13 +7,14 @@ import axios from "axios";
 import { Context } from "../../Context";
 
 export default function Post({ post }){
-
-    const { setSelectedPost, reload, setValueDescription, setValueName } = useContext(Context)
+    const { reload, setValue } = useContext(Context)
 
     function updateBtn(){
-        setValueName(post.name)    
-        setValueDescription(post.description)
-        setSelectedPost(post.id)      
+        setValue({
+            id: post.id,
+            name: post.name,
+            description: post.description
+        })
     }
 
     function deleteBtn(){

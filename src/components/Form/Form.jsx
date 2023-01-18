@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { 
     Col, 
     Form,
@@ -7,36 +7,58 @@ import {
 } from "react-bootstrap";
 import axios from "axios"
 
+import { Context } from "../../Context";
+
 import "./Form.css"
 
-function Forms({ setPosts, selectedPost, reload, setSelectedPost, setValueDescription, setValueName, valueName, valueDescription }) {
-
+function Forms(){
+    const { reload, setPosts, value, setValue } = useContext(Context)
     const [error, setError] = useState(false);
 
     function patchBtn(){
-        axios.put(`http://localhost:3001/posts/${selectedPost}`, {
-            name: valueName,
-            description: valueDescription
+        axios.put(`http://localhost:3001/posts/${value.id}`, {
+            name: value.name,
+            description: value.description
         })
         .then(res => {reload()
-        setSelectedPost('')
+        setValue({
+            id: '',
+            name: '',
+            description: ''
         })
+        })
+    }
+
+    function onChangeName({target}){
+        setValue((prev) => ({
+            ...prev, 
+            name: target.value
+        }))
+    }
+
+    function onChangeDescription({target}){
+        setValue((prev) => ({
+            ...prev,
+            description: target.value
+        }))
     }
 
     function submitTodo(){
-        if(valueName.trim() === '' || valueName.length > 20){
-                 alert('enter a valid value no more than 20 characters')
+        if (value.name.trim() === '' || value.name.length > 20){
+        alert('enter a valid value no more than 20 characters')
             return setError(true) 
         }
         axios.post('http://localhost:3001/posts', {
-            name: valueName,
-            description: valueDescription})
-        .then(res => { setError(false)
-        setPosts((prev) => [...prev, res.data])})   
+            name: value.name,
+            description: value.description
+        })
+        .then(res => { 
+            setError(false)
+            setPosts((prev) => [...prev, res.data])
+        })   
     }
 
-
-    return (<div className="form-container">
+    return(<div className="form-container">
         <Form className="form">
             <Form.Group>
                 <Row>
@@ -44,8 +66,8 @@ function Forms({ setPosts, selectedPost, reload, setSelectedPost, setValueDescri
                     Name:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control value={valueName} 
-                        onChange={e => setValueName(e.target.value)} className={error?'warning':''} 
+                        <Form.Control value={value.name} 
+                        onChange={onChangeName} className={error?'warning':''} 
                         size="sm" type="text" placeholder="Enter name" />
                     </Col>
                 </Row>
@@ -56,16 +78,15 @@ function Forms({ setPosts, selectedPost, reload, setSelectedPost, setValueDescri
                     Description:
                     </Form.Label>
                     <Col sm='7'>
-                        <Form.Control value={valueDescription} 
-                        onChange={e => setValueDescription(e.target.value)} 
+                        <Form.Control value={value.description} 
+                        onChange={onChangeDescription} 
                         size="sm" type="text" placeholder="Enter description" />
                     </Col>
                 </Row>
             </Form.Group>
         </Form>
-        <Button variant="primary" onClick={selectedPost?patchBtn:submitTodo}>Submit</Button>
-    </div>
-    )
+        <Button variant="primary" onClick={value.id ? patchBtn : submitTodo}>Submit</Button>
+    </div>)
 }
 
 export default Forms
