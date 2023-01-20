@@ -45,7 +45,7 @@ function Forms(){
 
     function submitTodo(){
         if (value.name.trim() === '' || value.name.length > 20){
-        alert('enter a valid value no more than 20 characters')
+            alert('enter a valid value no more than 20 characters')
             return setError(true) 
         }
         axios.post('http://localhost:3001/posts', {
@@ -55,6 +55,11 @@ function Forms(){
         .then(res => { 
             setError(false)
             setPosts((prev) => [...prev, res.data])
+            setValue({
+                id: '',
+                name: '',
+                description: ''
+            })
         })   
     }
 
